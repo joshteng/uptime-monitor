@@ -8,8 +8,8 @@ export class CreateRecordDto {
   readonly secondsBetweenHeartbeat: number;
 
   @IsNumber()
-  readonly minutesBetweenAlerts: number;
+  readonly maxAlertsPerDownTime: number;
 
   @IsNumber()
-  readonly maxAlerts: number;
+  readonly secondsBetweenAlerts: number;
 }

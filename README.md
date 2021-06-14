@@ -59,6 +59,7 @@ Tips
 
 ## Improvements Needed
 1. Send back friendly errors if the single endpoint request failed
+2. Use upsert instead of select + insert / update whenever a new request arrives
 2. Testing
 
 ## Disclaimer

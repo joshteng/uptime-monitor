@@ -2,7 +2,7 @@
 
 A simple downtime monitoring and alert service for all your processes!
 
-Great for processes and microservices that do not expose any ports or endpoints for monitoring via fabulous services Uptime Robot (free version).
+Great for processes and microservices that do not expose any ports or endpoints for monitoring via fabulous services such as Uptime Robot (free version).
 
 ## How it works
 It sends a pushover notification whenever your service stops sending a pulse (see endpoint below).

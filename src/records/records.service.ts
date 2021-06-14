@@ -62,7 +62,7 @@ export class RecordsService {
         secondsFromLastUpdate > record.secondsBetweenHeartbeat &&
         secondsFromLastAlert > record.secondsBetweenAlerts
       ) {
-        const msg = `-------${record.serviceName} has been down for ${secondsFromLastUpdate} seconds! ${secondsFromLastUpdate / 60} minutes------`
+        const msg = `${record.serviceName} has been down for ${secondsFromLastUpdate} seconds! ${secondsFromLastUpdate / 60} minutes`
         this.logger.debug(msg)
         this.notifier.notify(msg, 1)
 

@@ -12,7 +12,7 @@ This app runs a CRON like process every 10 second to check which services are do
 This is a single endpoint application that needs no configuration or set up for whatever new service or process you want to monitor. Just send a HTTP request (see endpoint below) and it will do it's magic.
 
 ## Dependencies
-❤️ Build with NestJS
+❤️ Built with NestJS
 
 - Node.js (tested with v14.17.0 - left `.tool-versions` in the root of this directory)
 - Sqlite3

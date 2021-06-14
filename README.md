@@ -57,10 +57,15 @@ Tips
 1. Use something like systemd (systemctl) if on Ubuntu and I think other Debian flavored distros
 1. And of course your actual server uptime matters.
 
+Also, may consider changing the DB used. Currently using SQLite. TypeORM and majority of this code will work with whatever Database TypeORM supports out-of-the-box. You will just need to modify `ormconfig.ts`.
+
 ## Improvements Needed
 1. Send back friendly errors if the single endpoint request failed
 2. Use upsert instead of select + insert / update whenever a new request arrives
 2. Testing
+
+## Beware
+I left `autoLoadEntities` as `true` in `app.module.ts`. This is a `TypeORM` configuration which auto syncs your DB schema to your entities. This can result in deletion of columns if you change the entities. So beware when using in production!
 
 ## Disclaimer
 As per usual, use at your own discretion especially when using to monitor billion dollar processes.

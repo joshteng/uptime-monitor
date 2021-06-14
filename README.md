@@ -2,7 +2,7 @@
 
 A simple downtime monitoring and alert service for all your processes!
 
-Great for processes and microservices that do not expose any ports or endpoints for monitoring via fabulous services such as Uptime Robot (free version).
+Great for processes and microservices that do not expose any ports or endpoints for monitoring via fabulous services such as Uptime Robot (free version). Think push instead of poll.
 
 ## How it works
 It sends a pushover notification whenever your service stops sending a pulse (see endpoint below).
@@ -12,6 +12,8 @@ This app runs a CRON like process every 10 second to check which services are do
 This is a single endpoint application that needs no configuration or set up for whatever new service or process you want to monitor. Just send a HTTP request (see endpoint below) and it will do it's magic.
 
 ## Dependencies
+❤️ Build with NestJS
+
 - Node.js (tested with v14.17.0 - left `.tool-versions` in the root of this directory)
 - Sqlite3
 - Pushover account

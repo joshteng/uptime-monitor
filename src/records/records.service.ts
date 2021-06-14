@@ -1,7 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { Cron, CronExpression } from '@nestjs/schedule';
 import { InjectRepository } from '@nestjs/typeorm';
-import { create } from 'eslint/lib/rules/*';
+import { PushoverService } from 'src/notifiers/pushover.service';
 import { Repository } from 'typeorm';
 import { CreateRecordDto } from './dto/create-record.dto';
 import { Record } from './entities/record';
@@ -12,7 +12,8 @@ export class RecordsService {
 
   constructor(
     @InjectRepository(Record)
-    private readonly recordRepository: Repository<Record>
+    private readonly recordRepository: Repository<Record>,
+    private readonly notifier: PushoverService
   ) { }
 
 
@@ -63,6 +64,7 @@ export class RecordsService {
       ) {
         const msg = `-------${record.serviceName} has been down for ${secondsFromLastUpdate} seconds! ${secondsFromLastUpdate / 60} minutes------`
         this.logger.debug(msg)
+        this.notifier.notify(msg, 1)
 
         record.lastAlertAt = String(now)
 

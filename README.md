@@ -1,73 +1,67 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo_text.svg" width="320" alt="Nest Logo" /></a>
-</p>
+# Uptime Monitor
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+A simple downtime monitoring and alert service for all your processes!
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+Great for processes and microservices that do not expose any ports or endpoints for monitoring via fabulous services Uptime Robot (free version).
 
-## Description
+## How it works
+It sends a pushover notification whenever your service stops sending a pulse (see endpoint below).
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+This app runs a CRON like process every 10 second to check which services are down.
 
-## Installation
+This is a single endpoint application that needs no configuration or set up for whatever new service or process you want to monitor. Just send a HTTP request (see endpoint below) and it will do it's magic.
 
-```bash
-$ npm install
+## Dependencies
+- Node.js (tested with v14.17.0 - left `.tool-versions` in the root of this directory)
+- Sqlite3
+- Pushover account
+
+## Environment variables
+```
+PUSHOVER_TOKEN="" # https://pushover.net/apps/build
+PUSHOVER_GROUP="" # Create subscription and a new custom group after creating app
 ```
 
-## Running the app
-
+## To run
 ```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+npm install
+npm run start
 ```
 
-## Test
-
-```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+## Endpoint
+Send a HTTP POST request to /records
+```curl
+curl -X POST -H "Content-Type: application/json" \
+  -d '{"serviceName": "<YOUR_SERVICE_NAME>", "secondsBetweenHeartbeat": 60, "secondsBetweenAlerts": 600, "maxAlertsPerDownTime": 10}' \
+  http://localhost:3000/records
 ```
 
-## Support
+## Endpoint Variables Defined
+```
+serviceName -> A unique name to identify your process
+secondsBetweenHeartbeat -> How many seconds before you receive the first alert when your process goes down. Generally, this should also be the same as how often your process sends a ping
+secondsBetweenAlerts -> When the second alert gets out if process still not sending a ping after first alert. This to avoid it getting spammy and annoying.
+maxAlertsPerDownTime -> Number of alerts per down time session before it stops sending you an alert. This will help prevent annoying you for forgetting to delete the service from the database.
+```
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+## Security
+Feel free to implement your own basic auth or whatever. I operate this in a controlled private network environment.
 
-## Stay in touch
+## Reliability
+Won't it be bad if your uptime monitor goes down instead of your app?
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+Typical production deployment practices will help prevent that from happening. Or you could deploy a new instance of this app for every instance of this app you deploy. ;p
 
-## License
+Tips
+1. Use PM2
+1. Use something like systemd (systemctl) if on Ubuntu and I think other Debian flavored distros
+1. And of course your actual server uptime matters.
 
-Nest is [MIT licensed](LICENSE).
+## Improvements Needed
+1. Send back friendly errors if the single endpoint request failed
+2. Testing
+
+## Disclaimer
+As per usual, use at your own discretion especially when using to monitor billion dollar processes.
+
+I've no plans to maintain this publicly for now. Feel free to clone, contribute or whatever tickles your fancy.
